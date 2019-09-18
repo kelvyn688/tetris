@@ -9,10 +9,22 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <conio.h>
+
 
 //Configuração das dimensões da matriz principal do jogo
 #define COLUMNS 60
 #define ROWS 25
+
+// CONFIGURAÇÃO DE TECLAS *****
+#define ESC 27
+#define ARROWS 224
+#define RIGHT 77
+#define LEFT 75
+#define TECLA_A 97
+#define TECLA_D 100
+#define TECLA_a 65
+#define TECLA_d 68
 
 /*
     Inicializa a matriz principal com 'espaços vazios'
