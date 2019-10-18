@@ -12,87 +12,89 @@
 
 #include "tetris.h"
 #include "display.h"
-
-#define DEBUG 0
+#define DEBUG 1
 
 /*
     Parte principal do programa, responsável por iniciar e 
     chamar as funções auxiliares.
 */
-int main()
-{
+int main(){
     char matrix[ROWS][COLUMNS];
     Bloco tijolo;
-    int keypressed = 0;
-   
+    int keypressed=0;
 
-    //posicao inicial do personagem ******
+    //posicao inicial do personagem
     tijolo.i = 0;
     tijolo.j = COLUMNS/2;
-    tijolo.tipo = Tipo_I;
-    tijolo.orientacao = ORIENTACAO_UP;
-    tijolo.width = 1;
-    tijolo.height = 4;
+    tijolo.tipo = TIPO_I;
+    tijolo.orientacao = ORIENTACAO_LEFT;
+    tijolo.width = 5;
+    tijolo.height = 1;
 
-    //inicializando matriz ****
+    //inicializando matriz
     init(matrix);
 
-    //apagar o cursor da tela *****
+    //apagar o cursor da tela
     ShowConsoleCursor(0);
     system("cls");
 
-    //animação do jogo********
-    while (keypressed != ESC )
-    {
+    //animação do jogo
+    while(keypressed != ESC){        
+        gotoxy(0,0);
 
-        gotoxy(0, 0);
+        #if DEBUG == 1
+            printf("posicao = (%d, %d)\n", tijolo.i, tijolo.j);
+            printf("dimensao = (%d, %d)\n", tijolo.width, tijolo.height);
+        #endif
 
-        //posicionar o @ no meio da tela *****
-        if(tijolo.i-3>=0) matrix[tijolo.i -3][tijolo.j] = PIXEL;
-        if(tijolo.i-2>=0) matrix[tijolo.i -2][tijolo.j] = PIXEL;
-        if(tijolo.i-1>=0) matrix[tijolo.i -1][tijolo.j] = PIXEL;
-        matrix[tijolo.i][tijolo.j] = PIXEL;
+        //posicionar o @ no meio da tela
+        drawBar(matrix, tijolo, PIXEL);
 
-        //mostro a matriz na tela ****
+        //mostro a matriz na tela
         printMatrix(matrix);
 
-        //faça posição anterior do @ ser apagada *****
-        matrix[tijolo.i-3][tijolo.j] = EMPTY;
-        matrix[tijolo.i-2][tijolo.j] = EMPTY;
-        matrix[tijolo.i-1][tijolo.j] = EMPTY;
-        matrix[tijolo.i][tijolo.j] = EMPTY;
+        //faça posição anterior do @ ser apagada
+        drawBar(matrix, tijolo, EMPTY);
 
-        //faço a posição da @ ir para a direita *****
-        if (tijolo.I < (ROWS - 1))
-            tijolo.I++;
 
-        //lendo teclas  *****
-        keypressed = 0;
-        if (kbhit()) keypressed = getch();
-        if(keypressed == ARROWS) keypressed = getch();
+        //faço a posição da @ ir para a direita
+        if(tijolo.i < (ROWS-1)) tijolo.i++;
+
+        //lendo teclas
+        keypressed = 0;         
+        if(kbhit()) keypressed = getch();            
+        if(keypressed==ARROWS) keypressed = getch();
 
         switch(keypressed){
-            case TECLA_A:           
-            case LEFT:
-            case TECLA_a:
-             if(tijolo.J >0) tijolo.J--;     // vai para esquerda *****
-             
-             break;     
-              
-            case TECLA_D :
-            case RIGHT:
-            case |TECLA_d:
-                if(tijolo.J < (COLUMNS -1)) tijolo.J++;  // vai para direita *****
+            case (int)'a':
+            case (int)'A':
+            case LEFT: 
+                if((tijolo.j - (tijolo.width/2)) > 0) tijolo.j--; //vai para esquerda
+            break; 
+            case TECLA_d:
+            case TECLA_D:
+            case RIGHT: 
+                if((tijolo.j + (tijolo.width/2)) < (COLUMNS-1)) tijolo.j++; //vai para a direita 
+            break; 
+            case TECLA_ESPACO:
+                if(tijolo.orientacao==ORIENTACAO_RIGHT)
+                    tijolo.orientacao = ORIENTACAO_UP;
+                else
+                    tijolo.orientacao++;
 
-           break;   
-                
-         
-          
+                //inverte as dimensões do tijolo
+                int aux = tijolo.width;
+                tijolo.width = tijolo.height;
+                tijolo.height = aux;
 
-
+                //resolvendo bug dos cantos
+                if(tijolo.j < (tijolo.width/2))
+                    tijolo.j = tijolo.width/2;
+                else if(tijolo.j > COLUMNS - (tijolo.width/2) - 1)
+                    tijolo.j = COLUMNS - (tijolo.width/2) - 1;
         }
 
-    } // fim de while *****
+    }
 
     system("pause");
 

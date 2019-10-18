@@ -11,49 +11,48 @@
 #include <stdlib.h>
 #include <conio.h>
 
-
 //Configuração das dimensões da matriz principal do jogo
-#define COLUMNS 60
-#define ROWS 25
+#define COLUMNS 30
+#define ROWS 60
 
-// CONFIGURAÇÃO DE TECLAS *****
+//Configuração de teclas
 #define ESC 27
 #define ARROWS 224
-#define RIGHT 77
 #define LEFT 75
-#define TECLA_A 97
-#define TECLA_D 100
-#define TECLA_a 65
-#define TECLA_d 68
+#define RIGHT 77
+#define TECLA_a 97
+#define TECLA_d 100
+#define TECLA_A 65
+#define TECLA_D 68
+#define TECLA_ESPACO 32
 
+//Criando as orientações para as peças
 #define ORIENTACAO_UP 1
-#define ORIENTACAO_DOWN 2
-#define ORIENTACAO_LEFT 3
-#define ORIENTACAO_RIGH 4
-
+#define ORIENTACAO_LEFT 2
+#define ORIENTACAO_DOWN 3
+#define ORIENTACAO_RIGHT 4
+//Criando os tipos de peças
 #define TIPO_L 1
-#define TIPO_L_R 2  //L REVERSO
+#define TIPO_L_R 2 // L reverso
 #define TIPO_T 3
 #define TIPO_Z 4
-#define TIPO_Z_R 5  // Z REVERSO
-#define TIPO_O 6    //QUADRADO
+#define TIPO_Z_R 5 // Z reverso
+#define TIPO_O 6   // Quadrado
 #define TIPO_I 7
 
-//estrutura padrão de componentes
+//Configurações de layout
+#define PIXEL 219
+#define EMPTY 32
 
-type struct {
-    int i;  //posição nas linhas da matriz
-    int j;  //posição nas colunas
-    int orientacao; //orientação das peças
-    int tipo;   //o tipo de peças
-    int width;  //largura das peças
-    int height; //altura das peças
-} Bloco
-
-{
-    /* data */
-};
-
+//Estrutura padrão de componentes
+typedef struct{
+    int i;  //posicao nas linhas da matriz
+    int j; //posicao nas colunas da matriz
+    int orientacao; //orientacao da peça
+    int tipo; //o tipo de peça (7 possíveis)
+    int width; //largura da peça
+    int height; //altura da peça
+}Bloco;
 
 /*
     Inicializa a matriz principal com 'espaços vazios'
@@ -65,3 +64,9 @@ void init(char matrix[ROWS][COLUMNS]);
     do computador.
 */
 void printMatrix(char matrix[ROWS][COLUMNS]);
+
+/*
+    Desenhar uma barra usando o simbolo do caracter ASCII
+    passado por parâmetro.
+*/
+void drawBar(char matrix[ROWS][COLUMNS], Bloco barra, int simbolo);
